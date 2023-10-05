@@ -1,8 +1,5 @@
 import requests
-from tkinter import *
 import tkinter as tk
-import pandas as pd
-import urllib3
 #################################################
 ######### API genaral set up ####################
 
