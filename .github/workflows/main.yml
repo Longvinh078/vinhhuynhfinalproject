@@ -21,8 +21,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Build artifact
-        run: python build.py 
 
       - name: Deploy to S3
         run: aws s3 cp artifact.zip s3://${{ secrets.S3_BUCKET_NAME }}/
