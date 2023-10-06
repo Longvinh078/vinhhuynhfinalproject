@@ -21,12 +21,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - uses: actions/checkout@master
-      - uses: jakejarvis/s3-sync-action@master
+      - name: Synchronize with S3
+        uses: jakejarvis/s3-sync-action@master
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: us-east-2
-          aws_s3_bucket: vinhhuynhfinalproject
-          args: --acl public-read --follow-symlinks --delete --exclude '.git*/*'
+          entrypoint: sh
+          args: -c "aws s3 sync path/to/sync s3://my-s3-bucket --acl public-read --follow-symlinks --delete --exclude '.git*/*'"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-2
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
 
