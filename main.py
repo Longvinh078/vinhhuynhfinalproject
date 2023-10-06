@@ -1,24 +1,30 @@
-import requests
-import tkinter as tk
-import pytest
-import os
+# Import necessary libraries
+import requests  # For making HTTP requests
+import tkinter as tk  # For creating the GUI window
+import pytest  # For testing
+import os  # For environment variables and file operations
 
-#################################################
-######### API genaral set up ####################
 
+# Function to retrieve the release date of an album using its ID
 def get_release_date(album_id):
-    # Make an API request to get album details
+    # Set up the parameters for the API request
     params = {
         'album_id': album_id,
-        'apikey': '870b08e49e1148f452f5e12f86c1e75f'
+        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your Musixmatch API key
     }
+
+    # Make an API request to get album details
     response = requests.get('http://api.musixmatch.com/ws/1.1/album.get', params=params)
 
+    # Check if the API request was successful (status code 200)
     if response.status_code == 200:
-        data = response.json()
+        data = response.json()  # Parse the JSON response
+
+        # Check if the 'album' key is present in the response
         if 'album' in data['message']['body']:
             album = data['message']['body']['album']
             release_date = album['album_release_date']
+
             # Format the release date as desired (you can adjust the format)
             formatted_release_date = release_date  # You can format this using Python's datetime module
             return formatted_release_date
@@ -28,17 +34,23 @@ def get_release_date(album_id):
         return "Error fetching data"
 
 
+# Function to retrieve lyrics based on song title and artist
 def get_lyrics(song_title, song_artist):
-    # Make an API request to get lyrics
+    # Set up the parameters for the lyrics API request
     lyrics_params = {
         'q_artist': song_artist,
         'q_track': song_title,
-        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your API key
+        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your Musixmatch API key
     }
+
+    # Make an API request to get lyrics
     lyrics_response = requests.get('http://api.musixmatch.com/ws/1.1/matcher.lyrics.get', params=lyrics_params)
 
+    # Check if the API request was successful (status code 200)
     if lyrics_response.status_code == 200:
-        lyrics_data = lyrics_response.json()
+        lyrics_data = lyrics_response.json()  # Parse the JSON response
+
+        # Check if the 'lyrics' key is present in the response
         if 'lyrics' in lyrics_data['message']['body']:
             lyrics_body = lyrics_data['message']['body']['lyrics']['lyrics_body']
             return lyrics_body
@@ -48,24 +60,31 @@ def get_lyrics(song_title, song_artist):
         return "Error fetching lyrics"
 
 
+# Function to retrieve song information and display it in the GUI
 def get_info():
-    song_title = song_title_entry.get()
-    song_artist = song_artist_entry.get()
+    song_title = song_title_entry.get()  # Get the song title entered by the user
+    song_artist = song_artist_entry.get()  # Get the song artist entered by the user
 
+    # Check if either the song title or artist is missing
     if not song_title or not song_artist:
         result_label.config(text="Please enter both song title and artist.")
         return
 
-    # Search for song details using both title and artist
+    # Set up parameters for the API request to search for song details
     params = {
         'q_track': song_title,
         'q_artist': song_artist,
-        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your API key
+        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your Musixmatch API key
     }
+
+    # Make an API request to search for the song details
     response = requests.get('http://api.musixmatch.com/ws/1.1/track.search', params=params)
 
+    # Check if the API request was successful (status code 200)
     if response.status_code == 200:
-        data = response.json()
+        data = response.json()  # Parse the JSON response
+
+        # Check if there are track results in the response
         if data['message']['body']['track_list']:
             track = data['message']['body']['track_list'][0]['track']
             album_id = track['album_id']
@@ -87,9 +106,11 @@ def get_info():
         result_label.config(text="Error fetching data")
 
 
+# Create the main Tkinter window
 root = tk.Tk()
 root.title("Music Info Search")
 
+# Create GUI elements (labels, entry fields, buttons, and result label)
 song_title_label = tk.Label(root, text="Song Title:")
 song_title_label.pack()
 song_title_entry = tk.Entry(root)
@@ -106,9 +127,9 @@ get_info_button.pack()
 result_label = tk.Label(root, text="")
 result_label.pack()
 
+# Start the Tkinter main loop
 root.mainloop()
 
 
-@pytest.mark.skipif("DISPLAY" not in os.environ, reason="No display available")
-def test_gui_functionality():
-    pass
+# Define a test function for GUI functionality
+@pytest.mark.skipif("DISPLAY" not in os.environ, reason="No display
