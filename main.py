@@ -4,13 +4,13 @@ import tkinter as tk  # For creating the GUI window
 import pytest  # For testing
 import os  # For environment variables and file operations
 
-
+API_KEY = '870b08e49e1148f452f5e12f86c1e75f'
 # Function to retrieve the release date of an album using its ID
 def get_release_date(album_id):
     # Set up the parameters for the API request
     params = {
         'album_id': album_id,
-        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your Musixmatch API key
+        'apikey': API_KEY
     }
 
     # Make an API request to get album details
@@ -25,7 +25,7 @@ def get_release_date(album_id):
             album = data['message']['body']['album']
             release_date = album['album_release_date']
 
-            # Format the release date as desired (you can adjust the format)
+            # Format the release date as desired
             formatted_release_date = release_date  # You can format this using Python's datetime module
             return formatted_release_date
         else:
@@ -40,7 +40,7 @@ def get_lyrics(song_title, song_artist):
     lyrics_params = {
         'q_artist': song_artist,
         'q_track': song_title,
-        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your Musixmatch API key
+        'apikey': API_KEY
     }
 
     # Make an API request to get lyrics
@@ -74,7 +74,7 @@ def get_info():
     params = {
         'q_track': song_title,
         'q_artist': song_artist,
-        'apikey': '870b08e49e1148f452f5e12f86c1e75f'  # Replace with your Musixmatch API key
+        'apikey': API_KEY
     }
 
     # Make an API request to search for the song details
@@ -132,4 +132,6 @@ root.mainloop()
 
 
 # Define a test function for GUI functionality
-@pytest.mark.skipif("DISPLAY" not in os.environ, reason="No display
+@pytest.mark.skipif("DISPLAY" not in os.environ, reason="No display")
+def test_gui_functionality():
+    pass
