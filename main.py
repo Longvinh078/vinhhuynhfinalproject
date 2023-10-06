@@ -1,5 +1,8 @@
 import requests
 import tkinter as tk
+import pytest
+import os
+
 #################################################
 ######### API genaral set up ####################
 
@@ -83,6 +86,7 @@ def get_info():
     else:
         result_label.config(text="Error fetching data")
 
+
 root = tk.Tk()
 root.title("Music Info Search")
 
@@ -103,3 +107,8 @@ result_label = tk.Label(root, text="")
 result_label.pack()
 
 root.mainloop()
+
+
+@pytest.mark.skipif("DISPLAY" not in os.environ, reason="No display available")
+def test_gui_functionality():
+    pass
