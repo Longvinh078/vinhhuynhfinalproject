@@ -26,8 +26,7 @@ def get_release_date(album_id):
             release_date = album['album_release_date']
 
             # Format the release date as desired
-            formatted_release_date = release_date  # You can format this using Python's datetime module
-            return formatted_release_date
+            return release_date
         else:
             return "Release date not found"
     else:
